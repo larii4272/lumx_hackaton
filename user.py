@@ -24,3 +24,43 @@ class User():
 
         print(response.text)
 
+
+    def transfer_tokens(self, contract, from_, to_, token):
+        url = "https://protocol-sandbox.lumx.io/v2/transactions/transfers"
+
+        payload = {
+            "contractId": f"{contract.contractId}",
+            "from": f"{from_}",
+            "to": f"{to_}",
+            "tokenId": f"{token}"
+        }
+        headers = {
+            "Authorization": f"Bearer {self.project.apiKey}",
+            "Content-Type": "application/json"
+        }
+        response = requests.request("POST", url, json=payload, headers=headers)
+        print(response.text)
+
+
+    def invoke_custom_transaction(self, wallet, contract, functionSignature, argumentsValues):
+        url = "https://protocol-sandbox.lumx.io/v2/transactions/custom"
+
+        payload = {
+            "walletId": f"{wallet.walletId}",
+            "contractAddress": f"{contract.contractAddress}",
+            "operations": [
+                {
+                    "functionSignature": f"{functionSignature}",
+                    "argumentsValues": [f"{argumentsValues}"],
+                    "messageValue": 123
+                }
+            ]
+        }
+        headers = {
+            "Authorization": f"Bearer {self.project.apiKey}",
+            "Content-Type": "application/json"
+        }
+        response = requests.request("POST", url, json=payload, headers=headers)
+        print(response.text)
+
+

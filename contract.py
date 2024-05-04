@@ -27,6 +27,7 @@ class Contract():
         #print(f"Contract created with success! {response.text}")
         response_dict = json.loads(response.text)
         self.contractId = response_dict["id"]
+        self.contractAddress = response_dict["address"]
     
     def create_token(self, name, description, maxSupply, imageUrl):
         url = f"https://protocol-sandbox.lumx.io/v2/contracts/{self.contractId}/token-types"
