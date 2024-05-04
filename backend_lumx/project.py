@@ -19,6 +19,7 @@ class Project():
         print(response.text)
         response_dict = json.loads(response.text) #str -> dict
         self.apiKey = response_dict['apiKey']
+        self.createdAt = response_dict['createdAt']
 
     #***********************CONTRACT METHODS***********************:
 
