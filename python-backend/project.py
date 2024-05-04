@@ -56,13 +56,15 @@ class Project():
             "uriNumber": uriNumber
         }
         headers = {
-            "Authorization": f"Bearer {self.apiToken}",
+            "Authorization": f"Bearer {self.apiKey}",
             "Content-Type": "application/json"
         }
         response = requests.request("POST", url, json=payload, headers=headers)
         print(response.text)
         response_dict = json.loads(response.text)
-        self.tokenId = response_dict["id"]
+
+        print(f"minting token on mint token function {response_dict}")
+        self.logId = response_dict["logId"]
 
     def transfer_tokens(self, contract, from_, to_, token):
         url = "https://protocol-sandbox.lumx.io/v2/transactions/transfers"

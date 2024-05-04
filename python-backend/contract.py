@@ -1,7 +1,6 @@
 import requests
 import json
 
-#@TODO TALVEZ CRIAR UMA CLASSE TOKEN? 
 class Contract():
 
     def __init__(self, project): 
@@ -29,7 +28,7 @@ class Contract():
         self.contractId = response_dict["id"]
         self.contractAddress = response_dict["address"]
     
-    def create_token(self, name, description, maxSupply, imageUrl):
+    def create_token(self, name, description, maxSupply, imageUrl=None):
         url = f"https://protocol-sandbox.lumx.io/v2/contracts/{self.contractId}/token-types"
         payload = {
             "name": f"{name}",
@@ -44,9 +43,10 @@ class Contract():
         }
 
         response = requests.request("POST", url, json=payload, headers=headers)
-        #print(response.text)
+        print(f"creating token on create token function {response.text}")
         response_dict = json.loads(response.text)
-        self.tokenTypeId = response_dict["id"]
+
+        self.tokenTypeName = response_dict["name"]
         self.uriNumber = response_dict["uriNumber"]
         self.tokens.append(response_dict) #@TODO criar uma classe pro token?
    
