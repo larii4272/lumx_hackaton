@@ -80,7 +80,7 @@ class Project():
         response = requests.request("POST", url, json=payload, headers=headers)
         print(response.text)
 
-    def invoke_custom_transaction(self, wallet, contract, functionSignature, argumentsValues):
+    def invoke_custom_transaction(self, wallet, contract, functionSignature, argumentsValues, messageValue):
         url = "https://protocol-sandbox.lumx.io/v2/transactions/custom"
 
         payload = {
@@ -90,7 +90,7 @@ class Project():
                 {
                     "functionSignature": f"{functionSignature}",
                     "argumentsValues": [f"{argumentsValues}"],
-                    "messageValue": 123
+                    "messageValue": messageValue
                 }
             ]
         }
