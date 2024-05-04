@@ -15,3 +15,5 @@ class Wallet():
         self.walletAddress = response_dict['address']
         self.walletId = response_dict['id']
 
+        print(response_dict)
+
