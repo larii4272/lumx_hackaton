@@ -1,6 +1,12 @@
 # flutter_app
 
-A new Flutter project.
+Para fazer as bandeiras dos paises usamos a FlagAPI:
+```dart
+String flagId = 'BR';
+'https://flagsapi.com/$flagId/flat/64.png'
+```
+Ex: 
+* https://flagsapi.com/BR/flat/64.png
 
 ## Getting Started
 
