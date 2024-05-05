@@ -90,7 +90,7 @@ class CreateSolidityAuction(forms.Form):
 path_purchasetoken = "./sol_contracts/purchase_solidity_token.json"
 class PurchaseSolidityToken(forms.Form):
     tokenId = forms.IntegerField()
-    wallet = forms.ModelChoiceField(queryset=SolidityToken.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
+    wallet = forms.ModelChoiceField(queryset=Wallet.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
     def save(self, *args, **kwargs):
 
@@ -105,16 +105,16 @@ class PurchaseSolidityToken(forms.Form):
         apiKeyInstance = user_instance.apiKey
         transactionId = non_classes.invoke_custom_transaction(purchasetoken['outsideContractAddress'], purchasetoken['functionSignature'],
                                               [self.cleaned_data['tokenId']], purchasetoken['messageValue'], walletIdInstance, apiKeyInstance)
-        transactionName = self.cleaned_data['name']
+        
         # Criar uma instância do modelo Transaction e salvá-la
-        transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName=transactionName)
+        transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName="PurchaseSolidityToken")
         transaction_instance.save()
     
 
-path_getAllSolitidyToken = "./sol_contracts/get_all_solidity_token.json"
+path_getAllSolitidyToken = "./sol_contracts/get_all_solidity_tokens.json"
 class GetAllSolidityToken(forms.Form):
     
-    wallet = forms.ModelChoiceField(queryset=SolidityToken.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
+    wallet = forms.ModelChoiceField(queryset=Wallet.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
     def save(self, *args, **kwargs):
 
@@ -128,18 +128,18 @@ class GetAllSolidityToken(forms.Form):
         user_instance = self.cleaned_data['user']
         apiKeyInstance = user_instance.apiKey
         transactionId = non_classes.invoke_custom_transaction(getAllSolitidyToken['outsideContractAddress'], getAllSolitidyToken['functionSignature'],
-                                              None, 
+                                              [""], 
                                               getAllSolitidyToken['messageValue'], walletIdInstance, apiKeyInstance)
-        transactionName = self.cleaned_data['name']
+    
         # Criar uma instância do modelo Transaction e salvá-la
-        transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName=transactionName)
+        transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName="GetAllSolidityToken")
         transaction_instance.save()
 
 
 path_getAllSolidityAuctions = "./sol_contracts/get_all_solidity_auctions.json"
 class GetAllSolidityAuctions(forms.Form):
     
-    wallet = forms.ModelChoiceField(queryset=SolidityToken.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
+    wallet = forms.ModelChoiceField(queryset=Wallet.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
     def save(self, *args, **kwargs):
 
@@ -153,9 +153,9 @@ class GetAllSolidityAuctions(forms.Form):
         user_instance = self.cleaned_data['user']
         apiKeyInstance = user_instance.apiKey
         transactionId = non_classes.invoke_custom_transaction(getAllSolitidyAuctions['outsideContractAddress'], getAllSolitidyAuctions['functionSignature'],
-                                              None, 
+                                              [""], 
                                               getAllSolitidyAuctions['messageValue'], walletIdInstance, apiKeyInstance)
-        transactionName = self.cleaned_data['name']
+        
         # Criar uma instância do modelo Transaction e salvá-la
-        transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName=transactionName)
+        transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName="GetAllSolidityAuctions")
         transaction_instance.save()
