@@ -1,6 +1,6 @@
 import requests
 import json
-
+import token_
 class Contract():
 
     def __init__(self, project): 
@@ -23,11 +23,12 @@ class Contract():
         }
 
         response = requests.request("POST", url, json=payload, headers=headers)
-        print(f"Contract created with success! {response.text}")
+        print(f"\nContract created with success! {response.text}")
         response_dict = json.loads(response.text)
         self.contractId = response_dict["id"]
         self.contractAddress = response_dict["address"]
-    
+        self.project.my_contracts.append(self)
+
     def create_token(self, name, description, maxSupply, imageUrl=None):
         url = f"https://protocol-sandbox.lumx.io/v2/contracts/{self.contractId}/token-types"
         payload = {
@@ -46,9 +47,10 @@ class Contract():
         print(f"creating token on create token function {response.text}")
         response_dict = json.loads(response.text)
 
-        self.tokenTypeName = response_dict["name"]
-        self.uriNumber = response_dict["uriNumber"]
-        self.tokens.append(response_dict) #@TODO criar uma classe pro token?
+        tokenTypeName = response_dict["name"]
+        uriNumber = response_dict["uriNumber"]
+        new_token = token_.Token_(self,uriNumber, tokenTypeName)
+        self.tokens.append(new_token) 
    
     #***********************READ METHODS***********************:
     def read_token_type(self):
@@ -60,6 +62,12 @@ class Contract():
     def read_all_token_types(self):
         url = f"https://protocol-sandbox.lumx.io/v2/contracts/{self.contractId}/token-types"
         headers = {"Authorization": f"Bearer {self.project.apiKey}"}
+        response = requests.request("GET", url, headers=headers)
+        print(response.text)
+    
+    def read_contract(self, contract):
+        url = f"https://protocol-sandbox.lumx.io/v2/contracts/{contract.contractId}"
+        headers = {"Authorization": f"Bearer {self.apiKey}"}
         response = requests.request("GET", url, headers=headers)
         print(response.text)
 
