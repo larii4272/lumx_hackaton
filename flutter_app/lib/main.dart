@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page/home_page.dart';
-import 'package:flutter_app/pages/login_page/login_page.dart';
+import 'package:flutter_app/pages/atleta_detalhes/atleta_detalhes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +10,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const AtletaDetalhesPage(),
     );
   }
 }
