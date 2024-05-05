@@ -5,6 +5,7 @@ class Wallet():
 
     def __init__(self, project) -> None:
         self.project = project
+        self.create_wallet()
 
     def create_wallet(self):
         url = "https://protocol-sandbox.lumx.io/v2/wallets"
