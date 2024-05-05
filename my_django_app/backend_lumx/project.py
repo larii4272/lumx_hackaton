@@ -5,8 +5,7 @@ import enum
 class Project():
 
     def __init__(self):
-        self.my_wallets = []
-        self.my_contracts = []  
+        pass
 
     def generate_apikey(self, blockchain):
         url = "https://protocol-sandbox.lumx.io/v2/projects/auth"
@@ -18,9 +17,11 @@ class Project():
 
         response = requests.request("POST", url, json=payload, headers=headers)
         response_dict = json.loads(response.text) #str -> dict
-        print(f"\napiKey was generated with success!\n{json.dumps(response_dict, indent=len(response_dict))}")
         self.apiKey = response_dict['apiKey']
         self.createdAt = response_dict['createdAt']
+        
+        print(f"\ngenerate_apikey function log:\n{json.dumps(response_dict, indent=len(response_dict))}")
+
 
     #***********************CONTRACT METHODS***********************:
 
@@ -28,7 +29,8 @@ class Project():
         url = f"https://protocol-sandbox.lumx.io/v2/contracts/{contract.contractId}/deploy"
         headers = {"Authorization": f"Bearer {self.apiToken}"}
         response = requests.request("POST", url, headers=headers)
-        print(response.text)
+        response_dict = json.loads(response.text) #str -> dict
+        print(f"\ndeploy_contract function log:\n{json.dumps(response_dict, indent=len(response_dict))}")
 
     def update_contract(self, contract, name, symbol, description):
         url = f"https://protocol-sandbox.lumx.io/v2/contracts/{contract.contractId}"
@@ -45,7 +47,7 @@ class Project():
 
         response = requests.request("PATCH", url, json=payload, headers=headers)
         response_dict = json.loads(response.text) #str -> dict
-        print({json.dumps(response_dict, indent=len(response_dict))})
+        print(f"\nupdate_contract function log:\n{json.dumps(response_dict, indent=len(response_dict))}")
 
 
     #***********************TRANSACTION METHODS***********************:
@@ -64,7 +66,7 @@ class Project():
         response = requests.request("POST", url, json=payload, headers=headers)
         response_dict = json.loads(response.text)
 
-        print(f"Minting token on mint token function {json.dumps(response_dict, indent=len(response_dict))}")
+        print(f"\nmint_tokens function log:\n{json.dumps(response_dict, indent=len(response_dict))}")
         self.logId = response_dict["logId"]
 
     def transfer_tokens(self, contract, from_, to_, token):
@@ -82,21 +84,22 @@ class Project():
         }
         response = requests.request("POST", url, json=payload, headers=headers)
         response_dict = json.loads(response.text)
-        print(f"\nTransfering token on mint token function {json.dumps(response_dict, indent=len(response_dict))}")
+        print(f"\ntransfer_tokens function log:\n{json.dumps(response_dict, indent=len(response_dict))}")
          
     def read_all_wallets(self):
         url = "https://protocol-sandbox.lumx.io/v2/wallets"
         headers = {"Authorization": f"Bearer {self.apiKey}"}
         response = requests.request("GET", url, headers=headers)
         response_dict = json.loads(response.text)
+        print(f"\read_all_wallets function log:\n{json.dumps(response_dict, indent=len(response_dict))}")
         return response_dict
         
-
     def read_all_contracts(self):
         url = "https://protocol-sandbox.lumx.io/v2/contracts"
         headers = {"Authorization": f"Bearer {self.apiKey}"}
         response = requests.request("GET", url, headers=headers)
         response_dict = json.loads(response.text)
+        print(f"\read_all_contracts function log:\n{json.dumps(response_dict, indent=len(response_dict))}")
         return response_dict
 
     

@@ -4,11 +4,14 @@ from backend_lumx import token_
 
 class Contract():
 
-    def __init__(self, project): 
+    def __init__(self, project=None): 
         self.project = project
-        self.tokens = [] # Como ele explicou na live, é por ordem numérica. Da pra usar o index da lista
         
-    def create_contract(self, name, symbol, description, type_):
+    def create_contract(self, name, symbol, description, type_, apiKey=None):
+        if apiKey is None and self.project is None :
+            raise ValueError("Error! We do not have enough information to do this transaction")
+        elif apiKey is None:
+            apiKey = self.project.apiKey
         # Creating a contract
         url = "https://protocol-sandbox.lumx.io/v2/contracts"
 
@@ -19,7 +22,7 @@ class Contract():
             "type": f"{type_}"
         }
         headers = {
-            "Authorization": f"Bearer {self.project.apiKey}",
+            "Authorization": f"Bearer {apiKey}",
             "Content-Type": "application/json"
         }
 
@@ -28,7 +31,6 @@ class Contract():
         response_dict = json.loads(response.text)
         self.contractId = response_dict["id"]
         self.contractAddress = response_dict["address"]
-        self.project.my_contracts.append(self)
 
     def create_token(self, name, description, maxSupply, imageUrl=None):
         url = f"https://protocol-sandbox.lumx.io/v2/contracts/{self.contractId}/token-types"
@@ -51,7 +53,6 @@ class Contract():
         tokenTypeName = response_dict["name"]
         uriNumber = response_dict["uriNumber"]
         new_token = token_.Token_(self,uriNumber, tokenTypeName)
-        self.tokens.append(new_token) 
    
     #***********************READ METHODS***********************:
     def read_token_type(self):

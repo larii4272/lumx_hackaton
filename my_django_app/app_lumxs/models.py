@@ -5,6 +5,12 @@ from django.core.exceptions import ValidationError
 from backend_lumx import project, contract, wallet, token_, transaction, enums
 
 
+class Person(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    def __str__(self):
+        return self.name
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, password=None,**extra_fields):
         if not username:
@@ -24,16 +30,14 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self.create_user(username, password, **extra_fields)
-    
 
+#@TODO Problema: pro meu código, preciso da instancia do meu project, mas no site só tenho a apiKey
 class CustomUser(AbstractBaseUser):
-    print("Você está na CustomUser class")
     username = models.CharField(max_length=100, primary_key=True)
     apiKey = models.CharField(max_length=1500, blank=True)   
     def save(self, *args, **kwargs):
         user_project = project.Project()
         user_project.generate_apikey(enums.AccountType.CHILIZ.value)
-        print(f"OpaOpa Opa {user_project.apiKey}")
         self.apiKey = user_project.apiKey
         super().save(*args, **kwargs)
     
@@ -63,14 +67,17 @@ class Wallet(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     walletAddress = models.CharField(max_length=100, blank=True)  # Campo para salvar o endereço da carteira
     walletId = models.CharField(max_length=100, blank=True)       # Campo para salvar o ID da carteira
-
+    walletTokens = models.IntegerField(default=10) #Ou seja, começa com 10 tokens
+    
     def save(self, *args, **kwargs):
         # Antes de salvar, obtenha o projeto associado ao usuário
-        project_instance = self.user.apiKey   
+        apiKeyinstance = self.user.apiKey   
         print("\nBelow api_key")  
         print(self.user.apiKey)
         # Use o projeto para criar a carteira
-        wallet_instance = wallet.Wallet(project_instance) 
+        wallet_instance = wallet.Wallet() 
+        wallet_instance.create_wallet(apiKey=apiKeyinstance)
+
         self.walletAddress = wallet_instance.walletAddress
         self.walletId = wallet_instance.walletId
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
@@ -86,14 +93,14 @@ class Contract(models.Model):
 
     def save(self, *args, **kwargs):
         # Antes de salvar, obtenha o projeto associado ao usuário
-        project_instance = self.user.project   
-        contract_instance = contract.Contract(project_instance) 
-        name = self.cleaned_data['name']
-        symbol = self.cleaned_data['symbol']
-        description = self.cleaned_data['description']
-        contractType = self.cleaned_data['contractType']
+        apiKeyinstance = self.user.apiKey    
+        contract_instance = contract.Contract() 
+        name = self.name 
+        symbol = self.symbol
+        description = self.description
+        contractType = self.contractType
         # Passando os valores para o método create_contract
-        contract_instance.create_contract(name, symbol, description, contractType)
+        contract_instance.create_contract(name, symbol, description, contractType, apiKeyinstance)
         self.contractAddress = contract_instance.contractAddress
         self.contractId = contract_instance.contractId
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
@@ -126,6 +133,8 @@ class Bet(models.Model):
 class Athlete(models.Model):
     athleteName = models.CharField(max_length=100)
     athleteId = models.IntegerField()
+    imageUrl = models.CharField(max_length=10000)
+    description = models.CharField(max_length=10000)
     def clean(self):
         # Verifica se o athleteId já existe
         if Athlete.objects.filter(athleteId=self.athleteId).exists():

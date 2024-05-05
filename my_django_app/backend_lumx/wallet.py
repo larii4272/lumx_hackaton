@@ -2,15 +2,19 @@
 import requests
 import json
 from backend_lumx import transaction
+
 class Wallet():
 
-    def __init__(self, project) -> None:
+    def __init__(self, project=None):
         self.project = project
-        self.create_wallet()
 
-    def create_wallet(self):
+    def create_wallet(self, apiKey=None):
+        if apiKey is None and self.project is None:
+            raise ValueError("Error! We do not have enough information to do this transaction")
+        elif apiKey is None:
+            apiKey = self.project.apiKey
         url = "https://protocol-sandbox.lumx.io/v2/wallets"
-        headers = {"Authorization": f"Bearer {self.project.apiKey}"}
+        headers = {"Authorization": f"Bearer {apiKey}"}
         response = requests.request("POST", url, headers=headers)
         response_dict = json.loads(response.text)
         self.walletAddress = response_dict['address']

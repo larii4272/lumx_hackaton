@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from app_lumxs.models import CustomUser, Wallet
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
-from .serializers import AthleteSerializer, ExperienceSerializer
+from .serializers import AthleteSerializer, ExperienceSerializer, TokenSerializer, Wallet
 
-from .models import Experience, Athlete
+from .models import Experience, Athlete, Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 # Create your views here.
@@ -60,5 +60,17 @@ def getExperiences(request):
 def getAthletes(request):
     athletes = Athlete.objects.all()
     serializer = AthleteSerializer(athletes, many=True) #False=> 1 experience, True => more than 1
+    return JsonResponse(serializer.data, safe=False)
+
+@api_view(['GET'])
+def getTokens(request):
+    tokens = Token.objects.all()
+    serializer = TokenSerializer(tokens, many=True) #False=> 1 experience, True => more than 1
+    return JsonResponse(serializer.data, safe=False)
+
+@api_view(['GET'])
+def getWallet(request):
+    wallets = Wallet.objects.all()
+    serializer = TokenSerializer(wallets, many=True) #False=> 1 experience, True => more than 1
     return JsonResponse(serializer.data, safe=False)
 

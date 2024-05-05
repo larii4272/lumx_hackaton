@@ -14,5 +14,10 @@ class ExperienceSerializer(ModelSerializer):
 
 class TokenSerializer(ModelSerializer):
     class Meta:
-        model = Experience
+        model = Token
         fields = ['imageUrl', 'description', 'maxSupply', 'name']
+
+class WalletSerializer(ModelSerializer):
+    class Meta:
+        model = Wallet
+        fields = 'walletTokens'
