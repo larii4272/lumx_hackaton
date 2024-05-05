@@ -7,6 +7,8 @@ class AppTextStyles {
   static final TextStyle title = GoogleFonts.zenDots(fontSize: 38);
   static final TextStyle subtile = GoogleFonts.inter(fontSize: 24);
   static final TextStyle description = GoogleFonts.inter(fontSize: 24);
+  static final TextStyle contador =
+      GoogleFonts.zenDots(fontSize: 50, color: AppColors.primary);
 }
 
 class PageBannerTextStyles {
@@ -14,6 +16,8 @@ class PageBannerTextStyles {
       GoogleFonts.zenDots(fontSize: 20, color: AppColors.secondary);
   static final TextStyle logoEscura =
       GoogleFonts.zenDots(fontSize: 20, color: Colors.black);
+  static final TextStyle logoRoxa =
+      GoogleFonts.zenDots(fontSize: 20, color: AppColors.primary);
   static final TextStyle textClaro =
       GoogleFonts.inter(fontSize: 20, color: AppColors.white);
   static final TextStyle textEscuro =

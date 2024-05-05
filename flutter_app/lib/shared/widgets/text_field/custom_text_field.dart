@@ -4,12 +4,17 @@ import 'package:flutter_app/shared/themes/app_colors.dart';
 class CustomTextFieldWidget extends StatelessWidget {
   final IconData prefixIcon;
   final String hintText;
+  final bool isSecret;
   const CustomTextFieldWidget(
-      {super.key, required this.prefixIcon, required this.hintText});
+      {super.key,
+      required this.prefixIcon,
+      required this.hintText,
+      required this.isSecret});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      obscureText: isSecret,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
         prefixIcon: Icon(prefixIcon),
