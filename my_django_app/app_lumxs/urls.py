@@ -13,7 +13,7 @@ urlpatterns = [
     path('experiences/', views.getExperiences),
     path('athletes/', views.getAthletes),
     path('lumxtokens/', views.getLumxTokens),
-    path('lumxtokens/', views.getSolidityTokens),
+    path('soliditytokens/', views.getSolidityTokens),
     path('wallet/', views.getWallet),
     path('haveexperience/', views.have_experience, name='have_experience'),
     path('create_solidity_token/', views.create_solidity_token, name='create_solidity_token'),
