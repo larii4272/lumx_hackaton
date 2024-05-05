@@ -28,8 +28,7 @@ class CustomUser(AbstractBaseUser):
     username = models.CharField(max_length=100, primary_key=True)
     project = project.Project()
     project.generate_apikey()
-    apiKey = models.CharField(max_length=1500, default=project.apiKey)  
-    print("\nAbove api_key") 
+    apiKey = models.CharField(max_length=1500, default=project.apiKey)   
     print(project.apiKey)
 
     is_staff = models.BooleanField(default=True)
@@ -91,6 +90,27 @@ class Contract(models.Model):
         self.contractId = contract_instance.contractId
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
 
+class Token(models.Model):
+    contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    maxSupply = models.IntegerField()
+    description = models.CharField(max_length=100)
+    imageUrl = models.CharField(max_length=10000)
+
+    def save(self, *args, **kwargs):
+        # Antes de salvar, obtenha o projeto associado ao usuário
+        project_instance = self.user.project   
+        contract_instance = contract.Contract(project_instance) 
+        name = self.cleaned_data['name']
+        maxSupply = self.cleaned_data['maxSupply']
+        description = self.cleaned_data['description']
+        imageUrl = self.cleaned_data['imageUrl']
+        # Passando os valores para o método create_contract
+        contract_instance.create_token(name, description, maxSupply, imageUrl)
+        self.contractAddress = contract_instance.contractAddress
+        self.contractId = contract_instance.contractId
+        super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
+
 class Bet(models.Model):
     player1 = models.CharField(max_length=100, blank=True)
     player2 = models.CharField(max_length=100, blank=True)
@@ -106,3 +126,4 @@ class Experience(models.Model):
     description = models.CharField(max_length=10000)
     imageUrl = models.CharField(max_length=10000)
     flag = models.CharField(max_length=10)
+    price = models.IntegerField()
