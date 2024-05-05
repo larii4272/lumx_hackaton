@@ -3,7 +3,7 @@ from django import forms
 from django.db import models
 from django.forms import ModelForm, TextInput, NumberInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from app_lumxs.models import CustomUser, Wallet, Transaction
+from app_lumxs.models import CustomUser, Wallet, Transaction, SolidityToken
 from backend_lumx import project, non_classes
 import json
 
@@ -25,11 +25,14 @@ class EditTokensForm(forms.Form):
             
 path_createtoken = "./sol_contracts/create_token.json"
 
+#********************API Functions Communicating with Solidity****************************
 
-class OutsideCreateToken(forms.Form):
+# Create Token: 
+
+class SolidityCreateToken(forms.Form):
     metadata = forms.CharField(max_length=1000)
     name = forms.CharField(max_length=100)
-    initialValue = forms.IntegerField()
+    tokenValue = forms.IntegerField()
     wallet = forms.ModelChoiceField(queryset=Wallet.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
     def save(self, *args, **kwargs):
@@ -43,22 +46,43 @@ class OutsideCreateToken(forms.Form):
         
         user_instance = self.cleaned_data['user']
         apiKeyInstance = user_instance.apiKey
-        print(f"self.cleaned_data['metadata'] {self.cleaned_data['metadata']}")
-        print("create_token['outsideContractAddress'] =", create_token['outsideContractAddress'])
-        print("create_token['functionSignature'] =", create_token['functionSignature'])
-        print("[self.cleaned_data['metadata'], self.cleaned_data['name'], self.cleaned_data['initialValue']] =", [self.cleaned_data['metadata'], self.cleaned_data['name'], self.cleaned_data['initialValue']])
-        print("create_token['messageValue'] =", create_token['messageValue'])
-        print("walletInstance =", walletIdInstance)
-        print("apiKeyInstance =", apiKeyInstance)
-
 
         transactionId = non_classes.invoke_custom_transaction(create_token['outsideContractAddress'], create_token['functionSignature'],
-                                              [self.cleaned_data['metadata'], self.cleaned_data['name'], self.cleaned_data['initialValue']], create_token['messageValue'], walletIdInstance, apiKeyInstance)
+                                              [self.cleaned_data['metadata'], self.cleaned_data['name'], self.cleaned_data['tokenValue']], create_token['messageValue'], walletIdInstance, apiKeyInstance)
         transactionName = self.cleaned_data['name']
         # Criar uma instância do modelo Transaction e salvá-la
         transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName=transactionName)
         transaction_instance.save()
+        solidity_token = SolidityToken(metadata=self.cleaned_data['metadata'], name=self.cleaned_data['name'], tokenValue=self.cleaned_data['tokenValue'])
+        solidity_token.save()
 
+#@TODO
+path_createtoken = "./sol_contracts/create_auction.json"
+class CreateAuctionToken(forms.Form):
+    metadata = forms.CharField(max_length=1000)
+    name = forms.CharField(max_length=100)
+    tokenValue = forms.IntegerField()
+    days = forms.IntegerField()
+    wallet = forms.ModelChoiceField(queryset=Wallet.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
+    user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
+    def save(self, *args, **kwargs):
+
+        with open(path_createtoken, 'r') as file:
+            create_token = json.load(file)
+
+        walletInstance = self.cleaned_data['wallet']  # Obtenha a instância de Wallet do formulário
+        walletIdInstance = walletInstance.walletId
+        print("\nBelow api_key")  
+        
+        user_instance = self.cleaned_data['user']
+        apiKeyInstance = user_instance.apiKey
+        transactionId = non_classes.invoke_custom_transaction(create_token['outsideContractAddress'], create_token['functionSignature'],
+                                              [self.cleaned_data['metadata'], self.cleaned_data['name'], self.cleaned_data['tokenValue'], self.cleaned_data['days']], 
+                                              create_token['messageValue'], walletIdInstance, apiKeyInstance)
+        transactionName = self.cleaned_data['name']
+        # Criar uma instância do modelo Transaction e salvá-la
+        transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName=transactionName)
+        transaction_instance.save()
 
 
     

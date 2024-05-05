@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from app_lumxs.models import CustomUser, Wallet
-from app_lumxs.forms import OutsideCreateToken
+from app_lumxs.forms import SolidityCreateToken, CreateAuctionToken
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
-from .serializers import AthleteSerializer, ExperienceSerializer, TokenSerializer, Wallet
+from .serializers import AthleteSerializer, ExperienceSerializer, LumxTokenSerializer, WalletSerializer, SolidityTokenSerializer
 
-from .models import Experience, Athlete, Token
+from .models import Experience, Athlete, SolidityToken, LumxToken
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 # Create your views here.
@@ -64,15 +64,21 @@ def getAthletes(request):
     return JsonResponse(serializer.data, safe=False)
 
 @api_view(['GET'])
-def getTokens(request):
-    tokens = Token.objects.all()
-    serializer = TokenSerializer(tokens, many=True) #False=> 1 experience, True => more than 1
+def getLumxTokens(request):
+    tokens = LumxToken.objects.all()
+    serializer = LumxTokenSerializer(tokens, many=True) #False=> 1 experience, True => more than 1
+    return JsonResponse(serializer.data, safe=False)
+
+@api_view(['GET'])
+def getSolidityTokens(request):
+    tokens = SolidityToken.objects.all()
+    serializer = SolidityTokenSerializer(tokens, many=True) #False=> 1 experience, True => more than 1
     return JsonResponse(serializer.data, safe=False)
 
 @api_view(['GET'])
 def getWallet(request):
     wallets = Wallet.objects.all()
-    serializer = TokenSerializer(wallets, many=True) #False=> 1 experience, True => more than 1
+    serializer = WalletSerializer(wallets, many=True) #False=> 1 experience, True => more than 1
     return JsonResponse(serializer.data, safe=False)
 
 def have_experience(request):
@@ -93,16 +99,28 @@ def have_experience(request):
     return render(request, 'have_experience.html', {'msg': msg})
 
 
-#@TODO ESSA FUNÇÃO TÁ MEIO CAPENGA
-def create_outside_token(request):
+def create_solidity_token(request):
     if request.method == 'POST':
-        form = OutsideCreateToken(request.POST)
+        form = SolidityCreateToken(request.POST)
         if form.is_valid():
             # Salvando o formulário e processando os dados
             form.save()
             # Redirecionando para uma página de sucesso ou outra página desejada
-            return redirect('create_outside_token')
+            return redirect('create_solidity_token')
     else:
-        form = OutsideCreateToken()
+        form = SolidityCreateToken()
     
-    return render(request, 'create_token.html', {'form': form})
+    return render(request, 'create_solidity_token.html', {'form': form})
+
+def create_solidity_auction(request):
+    if request.method == 'POST':
+        form = CreateAuctionToken(request.POST)
+        if form.is_valid():
+            # Salvando o formulário e processando os dados
+            form.save()
+            # Redirecionando para uma página de sucesso ou outra página desejada
+            return redirect('create_solidity_auction')
+    else:
+        form = CreateAuctionToken()
+    
+    return render(request, 'create_solidity_auction.html', {'form': form})

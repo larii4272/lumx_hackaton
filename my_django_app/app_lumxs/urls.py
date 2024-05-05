@@ -12,8 +12,10 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('experiences/', views.getExperiences),
     path('athletes/', views.getAthletes),
-    path('tokens/', views.getTokens),
+    path('lumxtokens/', views.getLumxTokens),
+    path('lumxtokens/', views.getSolidityTokens),
     path('wallet/', views.getWallet),
     path('haveexperience/', views.have_experience, name='have_experience'),
-    path('create_outside_token/', views.create_outside_token, name='create_outside_token'),
+    path('create_solidity_token/', views.create_solidity_token, name='create_solidity_token'),
+    path('create_solidity_auction/', views.create_solidity_auction, name='create_solidity_auction'),
 ]

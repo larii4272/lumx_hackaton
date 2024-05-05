@@ -94,13 +94,12 @@ class Contract(models.Model):
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
 
 
-class Token(models.Model):
+class LumxToken(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     maxSupply = models.IntegerField()
     description = models.CharField(max_length=100)
     imageUrl = models.CharField(max_length=10000)
-
     def save(self, *args, **kwargs):
         # Antes de salvar, obtenha o projeto associado ao usuário
         project_instance = self.user.project   
@@ -115,6 +114,11 @@ class Token(models.Model):
         self.contractId = contract_instance.contractId
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
 
+class SolidityToken(models.Model):
+    name = models.CharField(max_length=100)
+    tokenValue = models.IntegerField()
+    imageUrl = models.CharField(max_length=10000)
+
 class Bet(models.Model):
     player1 = models.CharField(max_length=100, blank=True)
     player2 = models.CharField(max_length=100, blank=True)
@@ -123,6 +127,7 @@ class Athlete(models.Model):
     athleteName = models.CharField(max_length=100)
     athleteId = models.IntegerField()
     imageUrl = models.CharField(max_length=10000)
+    flag = models.CharField(max_length=10)
     description = models.CharField(max_length=10000)
     def clean(self):
         # Verifica se o athleteId já existe
