@@ -1,9 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.core.exceptions import ValidationError
-
 from backend_lumx import project, contract, wallet, token_, transaction, enums
-
+from django.core.validators import MinLengthValidator
 
 class Person(models.Model):
     name = models.CharField(max_length=100)
@@ -85,7 +84,7 @@ class Wallet(models.Model):
 class Contract(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    symbol = models.CharField(max_length=100)
+    symbol = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
     description = models.CharField(max_length=100)
     contractType = models.CharField(max_length=100)
     contractAddress = models.CharField(max_length=100, blank=True)  # Campo para salvar o endereço da carteira
