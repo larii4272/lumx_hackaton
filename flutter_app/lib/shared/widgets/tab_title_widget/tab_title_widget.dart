@@ -37,7 +37,11 @@ class _TabTittleWidgetState extends State<TabTittleWidget> {
                 ? FontWeight.bold
                 : (isHoved ? FontWeight.bold : FontWeight.normal),
             fontSize: 28,
-            color: isHoved ? AppColors.primary : Colors.black,
+            color: widget.isOnPage == true
+                ? AppColors.primary
+                : !isHoved
+                    ? Colors.black45
+                    : Colors.black,
           ),
         ),
       ),

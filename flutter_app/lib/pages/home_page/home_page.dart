@@ -20,42 +20,39 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 75,
+        leadingWidth: 200,
+        leading: Center(
+          child: Text("Oly", style: AppTextStyles.logo),
+        ),
+        actions: [
+          TabTittleWidget(
+            title: "Home",
+            isOnPage: true,
+            onTap: () {},
+          ),
+          TabTittleWidget(
+            title: "Atletas",
+            onTap: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const AtletasPage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: Center(
         child: SizedBox(
           width: width >= 1600 ? 1600 : width,
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TabTittleWidget(
-                      title: "Home",
-                      isOnPage: true,
-                      onTap: () {},
-                    ),
-                    TabTittleWidget(
-                      title: "Atletas",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                const AtletasPage(),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                        );
-                      },
-                    ),
-                    TabTittleWidget(
-                      title: "Home",
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              ),
               const BannerWidget(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50),

@@ -13,7 +13,7 @@ class _BannerWidgetState extends State<BannerWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
         height: 75,
         width: double.maxFinite,
@@ -36,21 +36,23 @@ class _BannerWidgetState extends State<BannerWidget> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Text.rich(
-              TextSpan(
-                text: "Apoie atletas olímpicos e desbloqueie experiências",
-                children: [
-                  TextSpan(
-                    text: " Olyx ",
-                    style: PageBannerTextStyles.logoClara,
-                  ),
-                  TextSpan(
-                    text: "exclusivas!",
-                    style: PageBannerTextStyles.textClaro,
-                  ),
-                ],
+            child: SizedBox(
+              child: Text.rich(
+                TextSpan(
+                  text: "Apoie atletas olímpicos e desbloqueie experiências",
+                  children: [
+                    TextSpan(
+                      text: " Olyx ",
+                      style: PageBannerTextStyles.logoClara,
+                    ),
+                    TextSpan(
+                      text: "exclusivas!",
+                      style: PageBannerTextStyles.textClaro,
+                    ),
+                  ],
+                ),
+                style: PageBannerTextStyles.textClaro,
               ),
-              style: PageBannerTextStyles.textClaro,
             ),
           ),
         ),
