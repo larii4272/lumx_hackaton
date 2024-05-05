@@ -15,7 +15,6 @@ if __name__ == "__main__":
 
     time.sleep(30)
 
-    #transactionId = "a0629609-af5d-4063-8f9e-73f50652a297"
     transaction.read_transaction()
 
     #my_contract.create_token("my_token", "First Token", 10000)

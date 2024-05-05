@@ -1,7 +1,7 @@
 
 import requests
 import json
-import transaction
+from backend_lumx import transaction
 class Wallet():
 
     def __init__(self, project) -> None:

@@ -1,6 +1,7 @@
 import requests
 import json
-import token_
+from backend_lumx import token_
+
 class Contract():
 
     def __init__(self, project): 

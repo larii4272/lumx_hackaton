@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.core.exceptions import ValidationError
 
-from backend_lumx import project, contract, wallet
+from backend_lumx import project, contract, wallet, token_, transaction, enums
 
 
 class CustomUserManager(BaseUserManager):
@@ -13,7 +13,7 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-
+    
     def create_superuser(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -24,13 +24,20 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self.create_user(username, password, **extra_fields)
+    
 
 class CustomUser(AbstractBaseUser):
+    print("Você está na CustomUser class")
     username = models.CharField(max_length=100, primary_key=True)
-    project = project.Project()
-    project.generate_apikey()
-    apiKey = models.CharField(max_length=1500, default=project.apiKey)   
-    print(project.apiKey)
+    apiKey = models.CharField(max_length=1500, blank=True)   
+    def save(self, *args, **kwargs):
+        user_project = project.Project()
+        user_project.generate_apikey(enums.AccountType.CHILIZ.value)
+        print(f"OpaOpa Opa {user_project.apiKey}")
+        self.apiKey = user_project.apiKey
+        super().save(*args, **kwargs)
+    
+    print(apiKey)
 
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
