@@ -95,3 +95,14 @@ class Bet(models.Model):
     player1 = models.CharField(max_length=100, blank=True)
     player2 = models.CharField(max_length=100, blank=True)
 
+class Athlete(models.Model):
+    athleteName = models.CharField(max_length=100)
+    athleteId = models.IntegerField()
+    
+class Experience(models.Model):
+    experienceId = models.IntegerField()
+    athlete = models.ForeignKey(Athlete, on_delete=models.CASCADE)
+    experienceName = models.CharField(max_length=100)
+    description = models.CharField(max_length=10000)
+    imageUrl = models.CharField(max_length=10000)
+    flag = models.CharField(max_length=10)

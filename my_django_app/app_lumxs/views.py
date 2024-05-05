@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from app_lumxs.models import CustomUser, Wallet
-from app_lumxs.forms import CreateContract
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
+from .serializers import AthleteSerializer, ExperienceSerializer
 
+from .models import Experience, Athlete
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 # Create your views here.
 
 
@@ -33,10 +37,28 @@ def logout_view(request):
     logout(request)
     return redirect('login')  # Redirect to the login page after logout
 
+@api_view(['GET'])
+def getRoutes(request):
+    routes=[
+        {
+            'Endpoint': '/notes',
+            'method': 'GET',
+            'body': None,
+            'Description': None
+        }
+    ]
+    return JsonResponse(routes, index=False)
 
-@login_required
-def new_wallet(request):
-    if request.method == 'POST':
-        walletAddress = request.POST.get('walletAddress')
-        user = request.user.project
-        
+
+@api_view(['GET'])
+def getExperiences(request):
+    experiences = Experience.objects.all()
+    serializer = ExperienceSerializer(experiences, many=True) #False=> 1 experience, True => more than 1
+    return JsonResponse(serializer.data, safe=False)
+
+@api_view(['GET'])
+def getAthletes(request):
+    athletes = Athlete.objects.all()
+    serializer = AthleteSerializer(athletes, many=True) #False=> 1 experience, True => more than 1
+    return JsonResponse(serializer.data, safe=False)
+

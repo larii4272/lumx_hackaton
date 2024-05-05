@@ -6,8 +6,10 @@ urlpatterns = [
 ]
 
 urlpatterns = [
-    #path('', views.index, name='index'),s
+    #path('', views.index, name='index'),
     path('', views.index, name='initial_page'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('experiences/', views.getExperiences),
+    path('athletes/', views.getAthletes)
 ]
