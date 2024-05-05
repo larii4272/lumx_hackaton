@@ -44,9 +44,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const CustomTextFieldWidget(
-                    prefixIcon: Icons.mail_outline_outlined, hintText: 'Login'),
+                  isSecret: false,
+                  prefixIcon: Icons.mail_outline_outlined,
+                  hintText: 'Login',
+                ),
                 const CustomTextFieldWidget(
-                    prefixIcon: Icons.lock_outline, hintText: 'Senha'),
+                    isSecret: true,
+                    prefixIcon: Icons.lock_outline,
+                    hintText: 'Senha'),
                 TextButton(
                   style: TextButton.styleFrom(
                     backgroundColor: AppColors.primary,
