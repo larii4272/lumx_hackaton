@@ -74,3 +74,19 @@ def getWallet(request):
     serializer = TokenSerializer(wallets, many=True) #False=> 1 experience, True => more than 1
     return JsonResponse(serializer.data, safe=False)
 
+def have_experience(request):
+    msg = None
+    print("Estou dentro da have_experience")
+    if request.method == 'POST':
+        user = request.POST.get('user')
+        experience_id = request.POST.get('experience_id')  # supondo que você tenha um campo no formulário para o ID da experiência
+        experience = Experience.objects.get(pk=experience_id)
+        wallet = Wallet.objects.get(user=user)  # Supondo que você possa recuperar a carteira do usuário desta maneira
+        if wallet.has_enough_tokens(experience.price):
+            # O usuário tem tokens suficientes para comprar a experiência
+            # Faça o processamento adicional aqui
+            msg = "Compra realizada com sucesso!"
+        else:
+            # O usuário não tem tokens suficientes
+            msg = "Você não tem tokens suficientes para comprar esta experiência."
+    return render(request, 'have_experience.html', {'msg': msg})

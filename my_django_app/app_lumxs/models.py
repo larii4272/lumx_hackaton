@@ -30,7 +30,6 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(username, password, **extra_fields)
 
-#@TODO Problema: pro meu código, preciso da instancia do meu project, mas no site só tenho a apiKey
 class CustomUser(AbstractBaseUser):
     username = models.CharField(max_length=100, primary_key=True)
     apiKey = models.CharField(max_length=1500, blank=True)   
@@ -39,9 +38,7 @@ class CustomUser(AbstractBaseUser):
         user_project.generate_apikey(enums.AccountType.CHILIZ.value)
         self.apiKey = user_project.apiKey
         super().save(*args, **kwargs)
-    
-    print(apiKey)
-
+        
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     

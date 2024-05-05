@@ -13,5 +13,6 @@ urlpatterns = [
     path('experiences/', views.getExperiences),
     path('athletes/', views.getAthletes),
     path('tokens/', views.getTokens),
-    path('wallet/', views.getWallet)
+    path('wallet/', views.getWallet),
+    path('haveexperience/', views.have_experience, name='have_experience'),
 ]
