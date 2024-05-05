@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
+from django.core.exceptions import ValidationError
 
 from backend_lumx import project, contract, wallet
 
@@ -90,6 +91,7 @@ class Contract(models.Model):
         self.contractId = contract_instance.contractId
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
 
+
 class Token(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -118,7 +120,15 @@ class Bet(models.Model):
 class Athlete(models.Model):
     athleteName = models.CharField(max_length=100)
     athleteId = models.IntegerField()
-    
+    def clean(self):
+        # Verifica se o athleteId já existe
+        if Athlete.objects.filter(athleteId=self.athleteId).exists():
+            raise ValidationError("Este athleteId já está em uso.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Chama o método clean() antes de salvar
+        super().save(*args, **kwargs)
+
 class Experience(models.Model):
     experienceId = models.IntegerField()
     athlete = models.ForeignKey(Athlete, on_delete=models.CASCADE)
@@ -127,3 +137,12 @@ class Experience(models.Model):
     imageUrl = models.CharField(max_length=10000)
     flag = models.CharField(max_length=10)
     price = models.IntegerField()
+    def clean(self):
+        # Verifica se o athleteId já existe
+        if Athlete.objects.filter(experienceId=self.experienceId).exists():
+            raise ValidationError("Este experienceId já está em uso.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Chama o método clean() antes de salvar
+        super().save(*args, **kwargs)
+    
