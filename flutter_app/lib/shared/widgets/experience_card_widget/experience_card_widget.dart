@@ -36,7 +36,7 @@ class ExperienceCardWidget extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: const EdgeInsets.only(right: 60),
+                padding: const EdgeInsets.only(right: 50),
                 child: Image.asset(
                   "assets/images/backgound_atleta.png",
                   width: 233,
@@ -64,14 +64,20 @@ class ExperienceCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  nomeDoAtleta,
-                  style: ExperienceBannerTextStyles.atleta,
+                SizedBox(
+                  width: 475 * 0.6,
+                  child: Text(
+                    titulo,
+                    style: ExperienceBannerTextStyles.title2,
+                  ),
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: FlagWidget(flagId: flagId),
-                  title: Text(nomeDoAtleta),
+                  title: Text(
+                    nomeDoAtleta,
+                    style: ExperienceBannerTextStyles.atleta2,
+                  ),
                 ),
                 SizedBox(
                   width: 130,
@@ -80,6 +86,7 @@ class ExperienceCardWidget extends StatelessWidget {
                     text: "Desbloquear",
                   ),
                 ),
+                SizedBox(height: 5)
               ],
             )
           ],

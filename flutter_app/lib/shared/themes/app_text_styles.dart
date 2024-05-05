@@ -22,10 +22,15 @@ class PageBannerTextStyles {
 
 class ExperienceBannerTextStyles {
   static final TextStyle atleta = GoogleFonts.zenDots(fontSize: 26);
+  static final TextStyle atleta2 = GoogleFonts.zenDots(fontSize: 18);
   static final TextStyle description = GoogleFonts.inter(fontSize: 14);
   static final TextStyle title = GoogleFonts.zenDots(
     fontSize: 18,
     color: const Color(0xff4536A5),
+  );
+  static final TextStyle title2 = GoogleFonts.inter(
+    fontSize: 25,
+    fontWeight: FontWeight.bold,
   );
   static final TextStyle experience = GoogleFonts.inter(fontSize: 12);
   static final TextStyle tags = GoogleFonts.inter(
