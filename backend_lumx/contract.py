@@ -1,6 +1,6 @@
 import requests
 import json
-from backend_lumx import token_
+import token_
 
 class Contract():
 

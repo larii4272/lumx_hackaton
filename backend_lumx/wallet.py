@@ -1,7 +1,7 @@
 
 import requests
 import json
-from backend_lumx import transaction
+import transaction
 class Wallet():
 
     def __init__(self, project) -> None:
@@ -26,7 +26,7 @@ class Wallet():
             "operations": [
                 {
                     "functionSignature": f"{functionSignature}",
-                    "argumentsValues": [f"{argumentsValues}"],
+                    "argumentsValues": argumentsValues,
                     "messageValue": messageValue
                 }
             ]
