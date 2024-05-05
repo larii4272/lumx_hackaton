@@ -18,4 +18,7 @@ urlpatterns = [
     path('haveexperience/', views.have_experience, name='have_experience'),
     path('create_solidity_token/', views.create_solidity_token, name='create_solidity_token'),
     path('create_solidity_auction/', views.create_solidity_auction, name='create_solidity_auction'),
+    path('purchase_solidity_token/', views.purchase_solidity_token, name='purchase_solidity_token'),
+    path('get_all_solidity_token/', views.get_all_solidity_token, name='get_all_solidity_token'),
+    path('get_all_solidity_auction/', views.get_all_solidity_auction, name='get_all_solidity_auction'),
 ]

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from app_lumxs.models import CustomUser, Wallet
-from app_lumxs.forms import SolidityCreateToken, CreateAuctionToken
+from app_lumxs.forms import SolidityCreateToken, CreateSolidityAuction, PurchaseSolidityToken, GetAllSolidityToken, GetAllSolidityAuctions
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
 from .serializers import AthleteSerializer, ExperienceSerializer, LumxTokenSerializer, WalletSerializer, SolidityTokenSerializer
@@ -114,13 +114,53 @@ def create_solidity_token(request):
 
 def create_solidity_auction(request):
     if request.method == 'POST':
-        form = CreateAuctionToken(request.POST)
+        form = CreateSolidityAuction(request.POST)
         if form.is_valid():
             # Salvando o formulário e processando os dados
             form.save()
             # Redirecionando para uma página de sucesso ou outra página desejada
             return redirect('create_solidity_auction')
     else:
-        form = CreateAuctionToken()
+        form = CreateSolidityAuction()
     
     return render(request, 'create_solidity_auction.html', {'form': form})
+
+def purchase_solidity_token(request):
+    if request.method == 'POST':
+        form = PurchaseSolidityToken(request.POST)
+        if form.is_valid():
+            # Salvando o formulário e processando os dados
+            form.save()
+            # Redirecionando para uma página de sucesso ou outra página desejada
+            return redirect('purchase_solidity_token')
+    else:
+        form = PurchaseSolidityToken()
+    
+    return render(request, 'purchase_solidity_token.html', {'form': form})
+
+
+def get_all_solidity_token(request):
+    if request.method == 'POST':
+        form = GetAllSolidityToken(request.POST)
+        if form.is_valid():
+            # Salvando o formulário e processando os dados
+            form.save()
+            # Redirecionando para uma página de sucesso ou outra página desejada
+            return redirect('get_all_solidity_token')
+    else:
+        form = GetAllSolidityToken()
+    
+    return render(request, 'get_all_solidity_token.html', {'form': form})
+
+def get_all_solidity_auction(request):
+    if request.method == 'POST':
+        form = GetAllSolidityAuctions(request.POST)
+        if form.is_valid():
+            # Salvando o formulário e processando os dados
+            form.save()
+            # Redirecionando para uma página de sucesso ou outra página desejada
+            return redirect('get_all_solidity_auction')
+    else:
+        form = GetAllSolidityAuctions()
+    
+    return render(request, 'get_all_solidity_auction.html', {'form': form})

@@ -1,5 +1,5 @@
 {
-    "outsideContractAddress": "0x94ED59118CA26708Cef7E98D35a6f47f30ca6998",
+    "outsideContractAddress": "0xcD886112a53FeAeD07198A40C3E468D70CAf66B5",
     "functionSignature": "createAuction(string , string , uint256, uint256)",
     "messageValue": 0
 }

@@ -1,5 +1,0 @@
-{
-    "outsideContractAddress": "0x94ED59118CA26708Cef7E98D35a6f47f30ca6998",
-    "functionSignature": "createToken(string , string , uint256)",
-    "messageValue": 0
-}
