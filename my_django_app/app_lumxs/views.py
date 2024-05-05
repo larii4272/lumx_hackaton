@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from app_lumxs.models import CustomUser, Wallet
+from app_lumxs.forms import OutsideCreateToken
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
 from .serializers import AthleteSerializer, ExperienceSerializer, TokenSerializer, Wallet
@@ -82,7 +83,7 @@ def have_experience(request):
         experience_id = request.POST.get('experience_id')  # supondo que você tenha um campo no formulário para o ID da experiência
         experience = Experience.objects.get(pk=experience_id)
         wallet = Wallet.objects.get(user=user)  # Supondo que você possa recuperar a carteira do usuário desta maneira
-        if wallet.has_enough_tokens(experience.price):
+        if wallet.walletTokens >= experience.price:
             # O usuário tem tokens suficientes para comprar a experiência
             # Faça o processamento adicional aqui
             msg = "Compra realizada com sucesso!"
@@ -90,3 +91,18 @@ def have_experience(request):
             # O usuário não tem tokens suficientes
             msg = "Você não tem tokens suficientes para comprar esta experiência."
     return render(request, 'have_experience.html', {'msg': msg})
+
+
+#@TODO ESSA FUNÇÃO TÁ MEIO CAPENGA
+def create_outside_token(request):
+    if request.method == 'POST':
+        form = OutsideCreateToken(request.POST)
+        if form.is_valid():
+            # Salvando o formulário e processando os dados
+            form.save()
+            # Redirecionando para uma página de sucesso ou outra página desejada
+            return redirect('create_outside_token')
+    else:
+        form = OutsideCreateToken()
+    
+    return render(request, 'create_token.html', {'form': form})

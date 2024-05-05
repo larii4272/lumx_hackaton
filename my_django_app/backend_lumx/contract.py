@@ -31,6 +31,8 @@ class Contract():
         response_dict = json.loads(response.text)
         self.contractId = response_dict["id"]
         self.contractAddress = response_dict["address"]
+        if self.contractAddress is None:
+            self.contractAddress = 0
 
     def create_token(self, name, description, maxSupply, imageUrl=None):
         url = f"https://protocol-sandbox.lumx.io/v2/contracts/{self.contractId}/token-types"

@@ -15,4 +15,5 @@ urlpatterns = [
     path('tokens/', views.getTokens),
     path('wallet/', views.getWallet),
     path('haveexperience/', views.have_experience, name='have_experience'),
+    path('create_outside_token/', views.create_outside_token, name='create_outside_token'),
 ]

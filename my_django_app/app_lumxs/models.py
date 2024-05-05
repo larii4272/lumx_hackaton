@@ -1,17 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.core.exceptions import ValidationError
-from backend_lumx import project, contract, wallet, token_, transaction, enums
+from backend_lumx import project, contract, wallet, token_, transaction, enums, non_classes
 from django.core.validators import MinLengthValidator
-
-class Person(models.Model):
-    name = models.CharField(max_length=100)
-    age = models.IntegerField()
-    def __str__(self):
-        return self.name
+import json
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, password=None,**extra_fields):
+    def create_user(self, username, password=None, **extra_fields):
         if not username:
             raise ValueError('The username field must be set')
         user = self.model(username=username, **extra_fields)
@@ -22,23 +17,11 @@ class CustomUserManager(BaseUserManager):
     def create_superuser(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-
         return self.create_user(username, password, **extra_fields)
 
 class CustomUser(AbstractBaseUser):
     username = models.CharField(max_length=100, primary_key=True)
-    apiKey = models.CharField(max_length=1500, blank=True)   
-    def save(self, *args, **kwargs):
-        user_project = project.Project()
-        user_project.generate_apikey(enums.AccountType.CHILIZ.value)
-        self.apiKey = user_project.apiKey
-        super().save(*args, **kwargs)
-        
+    apiKey = models.CharField(max_length=1500, blank=True)
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     
@@ -58,13 +41,22 @@ class CustomUser(AbstractBaseUser):
     
     def check_password(self, raw_password: str) -> bool:
         return super().check_password(raw_password)
+
+    def save(self, *args, **kwargs):
+        if not self.apiKey:  # Verificar se já tem uma apiKey
+            user_project = project.Project()
+            user_project.generate_apikey(enums.AccountType.CHILIZ.value)
+            self.apiKey = user_project.apiKey
+        super().save(*args, **kwargs)
+
     
 class Wallet(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     walletAddress = models.CharField(max_length=100, blank=True)  # Campo para salvar o endereço da carteira
     walletId = models.CharField(max_length=100, blank=True)       # Campo para salvar o ID da carteira
-    walletTokens = models.IntegerField(default=10) #Ou seja, começa com 10 tokens
-    
+    walletTokens = models.IntegerField() #@TODO Vai salvar os tokens da Sonia aqui:D
+    #print("Teste user.apikey")
+    #print(user.apiKey)
     def save(self, *args, **kwargs):
         # Antes de salvar, obtenha o projeto associado ao usuário
         apiKeyinstance = self.user.apiKey   
@@ -100,6 +92,7 @@ class Contract(models.Model):
         self.contractAddress = contract_instance.contractAddress
         self.contractId = contract_instance.contractId
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
+
 
 class Token(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
@@ -156,4 +149,7 @@ class Experience(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()  # Chama o método clean() antes de salvar
         super().save(*args, **kwargs)
-    
+
+class Transaction(models.Model):
+    transactionId = models.CharField(max_length=10000)
+    transactionName = models.CharField(max_length=10000)

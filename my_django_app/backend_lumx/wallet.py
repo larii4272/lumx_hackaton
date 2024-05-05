@@ -21,11 +21,14 @@ class Wallet():
         self.walletId = response_dict['id']
         return response_dict
     
-    def invoke_custom_transaction(self, wallet, outsideContractAddress, functionSignature, argumentsValues, messageValue):
+    def invoke_custom_transaction(self, outsideContractAddress, functionSignature, argumentsValues, messageValue, walletId=None):
+        if walletId is None and self.walletId is None:
+            raise ValueError("Error! We do not have enough information to do this transaction")
+        elif walletId is None:
+            walletId = self.walletId
         url = "https://protocol-sandbox.lumx.io/v2/transactions/custom"
-
         payload = {
-            "walletId": f"{wallet.walletId}",
+            "walletId": f"{walletId}",
             "contractAddress": f"{outsideContractAddress}", #The contract is from outside
             "operations": [
                 {
