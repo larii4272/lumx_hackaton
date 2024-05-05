@@ -66,9 +66,9 @@ class Wallet(models.Model):
 
     def save(self, *args, **kwargs):
         # Antes de salvar, obtenha o projeto associado ao usuário
-        project_instance = self.user.project   
+        project_instance = self.user.apiKey   
         print("\nBelow api_key")  
-        print(self.user.project.apiKey)
+        print(self.user.apiKey)
         # Use o projeto para criar a carteira
         wallet_instance = wallet.Wallet(project_instance) 
         self.walletAddress = wallet_instance.walletAddress
@@ -97,7 +97,6 @@ class Contract(models.Model):
         self.contractAddress = contract_instance.contractAddress
         self.contractId = contract_instance.contractId
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
-
 
 class Token(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
@@ -146,7 +145,7 @@ class Experience(models.Model):
     price = models.IntegerField()
     def clean(self):
         # Verifica se o athleteId já existe
-        if Athlete.objects.filter(experienceId=self.experienceId).exists():
+        if Experience.objects.filter(experienceId=self.experienceId).exists():
             raise ValidationError("Este experienceId já está em uso.")
 
     def save(self, *args, **kwargs):

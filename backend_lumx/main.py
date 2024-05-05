@@ -11,7 +11,7 @@ if __name__ == "__main__":
     
     transaction = my_wallet.invoke_custom_transaction(my_wallet, "0x94ED59118CA26708Cef7E98D35a6f47f30ca6998", "createAuction(string , string , uint256 , uint256)", 
                                          ["https://azure-bitter-grasshopper-987.mypinata.cloud/ipfs/Qmb46mvqWRLd6SDxfyovrwgUbFJtHBFwcDzRZ5a15TkDz1", 
-                                          "aloo", 1000000000000000000,2], 0)
+                                          "alo", 1000000000000000000,2], 0)
 
     time.sleep(30)
 
