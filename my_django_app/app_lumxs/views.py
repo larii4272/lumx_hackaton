@@ -129,10 +129,10 @@ def purchase_solidity_token(request):
     if request.method == 'POST':
         form = PurchaseSolidityToken(request.POST)
         if form.is_valid():
-            # Salvando o formulário e processando os dados
-            form.save()
-            # Redirecionando para uma página de sucesso ou outra página desejada
-            return redirect('purchase_solidity_token')
+            if form.save():
+                return redirect('initial_page')  # Redirect to Home Page
+            else:
+                form.add_error(None, "Saldo insuficiente na carteira para comprar o token.")  # Adicionando aviso ao formulário
     else:
         form = PurchaseSolidityToken()
     

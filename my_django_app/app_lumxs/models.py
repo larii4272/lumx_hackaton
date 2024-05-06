@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.core.exceptions import ValidationError
 from backend_lumx import project, contract, wallet, token_, transaction, enums, non_classes
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator
 import json
 
 class CustomUserManager(BaseUserManager):
@@ -52,9 +52,9 @@ class CustomUser(AbstractBaseUser):
     
 class Wallet(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    walletAddress = models.CharField(max_length=100, blank=True)  # Campo para salvar o endereço da carteira
-    walletId = models.CharField(max_length=100, blank=True)       # Campo para salvar o ID da carteira
-    walletTokens = models.IntegerField() #@TODO Vai salvar os tokens da Sonia aqui:D
+    walletAddress = models.CharField(max_length=100, blank=True)  
+    walletId = models.CharField(max_length=100, blank=True)       
+    walletTokens = models.IntegerField(default=10000, validators=[MinValueValidator(0)]) 
     #print("Teste user.apikey")
     #print(user.apiKey)
     def save(self, *args, **kwargs):
@@ -117,7 +117,8 @@ class LumxToken(models.Model):
 class SolidityToken(models.Model):
     name = models.CharField(max_length=100)
     tokenValue = models.IntegerField()
-    imageUrl = models.CharField(max_length=10000)
+    metadata = models.CharField(max_length=10000)
+    tokenId = models.IntegerField()
 
 class Bet(models.Model):
     player1 = models.CharField(max_length=100, blank=True)

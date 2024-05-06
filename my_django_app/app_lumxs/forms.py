@@ -6,6 +6,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from app_lumxs.models import CustomUser, Wallet, Transaction, SolidityToken
 from backend_lumx import project, non_classes
 import json
+from django.core.validators import MinLengthValidator
+
 
 
 class LoginForm(AuthenticationForm):
@@ -34,6 +36,7 @@ class SolidityCreateToken(forms.Form):
     metadata = forms.CharField(max_length=1000)
     name = forms.CharField(max_length=100)
     tokenValue = forms.IntegerField()
+    tokenId = forms.IntegerField()
     wallet = forms.ModelChoiceField(queryset=Wallet.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
     def save(self, *args, **kwargs):
@@ -50,13 +53,14 @@ class SolidityCreateToken(forms.Form):
         apiKeyInstance = user_instance.apiKey
 
         transactionId = non_classes.invoke_custom_transaction(create_token['outsideContractAddress'], create_token['functionSignature'],
-                                              [self.cleaned_data['metadata'], self.cleaned_data['name'], self.cleaned_data['tokenValue']], create_token['messageValue'], walletIdInstance, apiKeyInstance)
+                                              [self.cleaned_data['metadata'], self.cleaned_data['name'], self.cleaned_data['tokenValue'], self.cleaned_data['tokenId']], 
+                                              create_token['messageValue'], walletIdInstance, apiKeyInstance)
         transactionName = self.cleaned_data['name']
         # Criar uma instância do modelo Transaction e salvá-la
         transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName=transactionName)
         transaction_instance.save()
-        #solidity_token = SolidityToken(metadata=self.cleaned_data['metadata'], name=self.cleaned_data['name'], tokenValue=self.cleaned_data['tokenValue'])
-        #solidity_token.save()
+        solidity_token = SolidityToken(metadata=self.cleaned_data['metadata'], name=self.cleaned_data['name'], tokenValue=self.cleaned_data['tokenValue'],tokenId=self.cleaned_data['tokenId'])
+        solidity_token.save()
 
 
 # Create Auction
@@ -64,7 +68,7 @@ path_createauction = "./sol_contracts/create_solidity_auction.json"
 class CreateSolidityAuction(forms.Form):
     metadata = forms.CharField(max_length=1000)
     name = forms.CharField(max_length=100)
-    tokenValue = forms.IntegerField()
+    tokenValue = forms.IntegerField(max_value=100)
     days = forms.IntegerField()
     wallet = forms.ModelChoiceField(queryset=Wallet.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
@@ -89,7 +93,9 @@ class CreateSolidityAuction(forms.Form):
 
 path_purchasetoken = "./sol_contracts/purchase_solidity_token.json"
 class PurchaseSolidityToken(forms.Form):
-    tokenId = forms.IntegerField()
+
+    myToken = forms.ModelChoiceField(queryset=SolidityToken.objects.all())
+    #tokenId = forms.IntegerField()
     wallet = forms.ModelChoiceField(queryset=Wallet.objects.all())  # Use ModelChoiceField para selecionar um objeto Wallet
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
     def save(self, *args, **kwargs):
@@ -97,19 +103,34 @@ class PurchaseSolidityToken(forms.Form):
         with open(path_createtoken, 'r') as file:
             purchasetoken = json.load(file)
 
+        myTokenInstance = self.cleaned_data['myToken']
+        tokenId = myTokenInstance.tokenId
+        tokenValue = myTokenInstance.tokenValue
+
         walletInstance = self.cleaned_data['wallet']  # Obtenha a instância de Wallet do formulário
         walletIdInstance = walletInstance.walletId
-        print("\nBelow api_key")  
-        
+        walletTokens = walletInstance.walletTokens
         user_instance = self.cleaned_data['user']
         apiKeyInstance = user_instance.apiKey
-        transactionId = non_classes.invoke_custom_transaction(purchasetoken['outsideContractAddress'], purchasetoken['functionSignature'],
-                                              [self.cleaned_data['tokenId']], purchasetoken['messageValue'], walletIdInstance, apiKeyInstance)
-        
-        # Criar uma instância do modelo Transaction e salvá-la
-        transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName="PurchaseSolidityToken")
-        transaction_instance.save()
-    
+
+        print(f"walletTokens {walletTokens} tokenValue {tokenValue}")
+        if walletTokens >= tokenValue:
+            transactionId = non_classes.invoke_custom_transaction(purchasetoken['outsideContractAddress'], purchasetoken['functionSignature'],
+                                                [tokenId], purchasetoken['messageValue'], walletIdInstance, apiKeyInstance)
+            
+            # Create an instance of the Transaction model and save it
+            transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName="PurchaseSolidityToken")
+            transaction_instance.save()
+
+            # Updating walletTokens value
+            walletInstance.walletTokens -= tokenValue
+            walletInstance.save()
+            return True
+        else:
+            print("Entrou no else")
+            return False
+            
+            
 
 path_getAllSolitidyToken = "./sol_contracts/get_all_solidity_tokens.json"
 class GetAllSolidityToken(forms.Form):

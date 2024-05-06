@@ -1,5 +1,5 @@
 {
-    "outsideContractAddress": "0xcD886112a53FeAeD07198A40C3E468D70CAf66B5",
+    "outsideContractAddress": "0x57B2a8bE8Cf89153FD91D06143445ffE66E47815",
     "functionSignature": "getAllTokens()",
     "messageValue": 0
 }

@@ -15,12 +15,12 @@ class ExperienceSerializer(ModelSerializer):
 class LumxTokenSerializer(ModelSerializer):
     class Meta:
         model = LumxToken
-        fields = ['imageUrl', 'description', 'maxSupply', 'name']
+        fields = '__all__'
 
 class SolidityTokenSerializer(ModelSerializer):
     class Meta:
         model = SolidityToken
-        fields = ['imageUrl', 'description', 'maxSupply', 'name']
+        fields = '__all__'
 
 class WalletSerializer(ModelSerializer):
     class Meta:
