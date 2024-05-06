@@ -81,24 +81,6 @@ def getWallet(request):
     serializer = WalletSerializer(wallets, many=True) #False=> 1 experience, True => more than 1
     return JsonResponse(serializer.data, safe=False)
 
-def have_experience(request):
-    msg = None
-    print("Estou dentro da have_experience")
-    if request.method == 'POST':
-        user = request.POST.get('user')
-        experience_id = request.POST.get('experience_id')  # supondo que você tenha um campo no formulário para o ID da experiência
-        experience = Experience.objects.get(pk=experience_id)
-        wallet = Wallet.objects.get(user=user)  # Supondo que você possa recuperar a carteira do usuário desta maneira
-        if wallet.walletTokens >= experience.price:
-            # O usuário tem tokens suficientes para comprar a experiência
-            # Faça o processamento adicional aqui
-            msg = "Compra realizada com sucesso!"
-        else:
-            # O usuário não tem tokens suficientes
-            msg = "Você não tem tokens suficientes para comprar esta experiência."
-    return render(request, 'have_experience.html', {'msg': msg})
-
-
 def create_solidity_token(request):
     if request.method == 'POST':
         form = SolidityCreateToken(request.POST)
@@ -112,6 +94,7 @@ def create_solidity_token(request):
     
     return render(request, 'create_solidity_token.html', {'form': form})
 
+
 def create_solidity_auction(request):
     if request.method == 'POST':
         form = CreateSolidityAuction(request.POST)
@@ -124,6 +107,7 @@ def create_solidity_auction(request):
         form = CreateSolidityAuction()
     
     return render(request, 'create_solidity_auction.html', {'form': form})
+
 
 def purchase_solidity_token(request):
     if request.method == 'POST':
@@ -164,3 +148,4 @@ def get_all_solidity_auction(request):
         form = GetAllSolidityAuctions()
     
     return render(request, 'get_all_solidity_auction.html', {'form': form})
+
