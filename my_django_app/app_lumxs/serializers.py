@@ -25,7 +25,7 @@ class SolidityTokenSerializer(ModelSerializer):
 class WalletSerializer(ModelSerializer):
     class Meta:
         model = Wallet
-        fields = 'walletTokens'
+        fields = ['walletTokens']
 
 class SoliditTokenSerializer(ModelSerializer):
     class Meta:
