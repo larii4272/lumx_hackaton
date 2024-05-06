@@ -132,7 +132,7 @@ def purchase_solidity_token(request):
             if form.save():
                 return redirect('initial_page')  # Redirect to Home Page
             else:
-                form.add_error(None, "Saldo insuficiente na carteira para comprar o token.")  # Adicionando aviso ao formulário
+                form.add_error(None, "Insufficient balance in the wallet to purchase the token.")  # Adicionando aviso ao formulário
     else:
         form = PurchaseSolidityToken()
     
