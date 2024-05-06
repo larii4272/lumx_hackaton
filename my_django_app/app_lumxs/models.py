@@ -24,6 +24,7 @@ class CustomUser(AbstractBaseUser):
     apiKey = models.CharField(max_length=1500, blank=True)
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
+
     
     objects = CustomUserManager()
     
@@ -55,17 +56,16 @@ class Wallet(models.Model):
     walletAddress = models.CharField(max_length=100, blank=True)  
     walletId = models.CharField(max_length=100, blank=True)       
     walletTokens = models.IntegerField(default=10000, validators=[MinValueValidator(0)]) 
-    #print("Teste user.apikey")
-    #print(user.apiKey)
+
     def save(self, *args, **kwargs):
         # Antes de salvar, obtenha o projeto associado ao usuário
         apiKeyinstance = self.user.apiKey   
-        print("\nBelow api_key")  
-        print(self.user.apiKey)
-        # Use o projeto para criar a carteira
+        
+        # Before saving, obtain the project associated with the user.
         wallet_instance = wallet.Wallet() 
         wallet_instance.create_wallet(apiKey=apiKeyinstance)
-
+        
+        #Use the project to create the wallet.
         self.walletAddress = wallet_instance.walletAddress
         self.walletId = wallet_instance.walletId
         super().save(*args, **kwargs)  # Salva a instância do modelo OpenWallet no banco de dados
