@@ -100,7 +100,7 @@ class PurchaseSolidityToken(forms.Form):
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all())
     def save(self, *args, **kwargs):
 
-        with open(path_createtoken, 'r') as file:
+        with open(path_purchasetoken, 'r') as file:
             purchasetoken = json.load(file)
 
         myTokenInstance = self.cleaned_data['myToken']
@@ -130,8 +130,7 @@ class PurchaseSolidityToken(forms.Form):
             print("Entrou no else")
             return False
             
-            
-
+        
 path_getAllSolitidyToken = "./sol_contracts/get_all_solidity_tokens.json"
 class GetAllSolidityToken(forms.Form):
     
@@ -180,3 +179,5 @@ class GetAllSolidityAuctions(forms.Form):
         # Criar uma instância do modelo Transaction e salvá-la
         transaction_instance = Transaction.objects.create(transactionId=transactionId, transactionName="GetAllSolidityAuctions")
         transaction_instance.save()
+
+
