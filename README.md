@@ -57,3 +57,71 @@ Matheus Oliveira
 Desenvolvedor Flutter,  Fundador da Eita Rolê, empreendedor com experiência em desenvolvimento e impressão 3D.
 LinkedIn: https://www.linkedin.com/in/devmatheusoliveira/
 matheusoliveira.workmso@gmail.com
+
+
+# Smart Auction and Tokens Contract - Crypto Genius - OLY
+
+This smart contract, developed in Solidity, offers functionalities for creating auctions and tokens, facilitating the interaction and transaction of digital assets on the blockchain. It can be deployed on any compatible EVM.
+
+## Features
+
+### Auctions
+The contract enables the creation and management of digital asset auctions. Users can create auctions by specifying the item name, initial price, auction duration, and other relevant information. During the auction period, participants can place bids, with the highest bid at the end of the period winning the item.
+
+### Tokens
+In addition to auctions, the contract supports the creation and transfer of digital tokens. These tokens can represent various assets such as collectibles, rewards, or participation rights in events. Users can create new tokens and transfer them as needed.
+
+### Payments and Fees
+The contract enables payments in Ethereum to bid on items in auctions or purchase tokens. A percentage of the amount raised in auctions is retained as a service fee, with the remainder passed on to the seller of the item. Similarly, when purchasing tokens, a portion of the amount may be allocated to the contract owner as a service fee.
+
+## How to Use
+
+To utilize the AuctionCrypto contract, follow these steps:
+
+1. **Deploy the Contract**: Deploy the contract on the Ethereum blockchain using a platform of your choice, such as Remix, Truffle, or run this project on Foundry.
+
+   #### Example of how to deploy on the chiliz network
+   `forge script script/AuctionCrypto.s.sol:AuctionCryptoScript --rpc-url chiliz --broadcast`
+
+2. **Interact with the Contract**: Use a compatible Ethereum wallet, such as MetaMask, to interact with the contract. This includes creating new auctions, placing bids on existing auctions, creating tokens, and purchasing available tokens.
+
+3. **Manage Transactions**: When participating in auctions or purchasing tokens, ensure you have a sufficient balance in your Ethereum wallet. Also, be aware of the associated transaction fees.
+
+4. **Monitor Activities**: Keep track of events emitted by the contract to monitor auction and token transaction activity. This includes events such as the creation of new auctions, bids on auctions, auction closure, and token purchases.
+
+## Author
+This contract was developed by the CryptoGenius Team.
+For more information, please contact hackateam4@gmail.com.
+
+## CryptoGenius Team
+
+
+*Dayana Mazini
+UX/UI, Administrator, entrepreneur with experience in developing innovative businesses in the fields of finance, education, and social transformation.
+LinkedIn: https://www.linkedin.com/in/dayanamazini/ 
+Mazini.dayana@gmail.com
+
+*Aline Silva
+Entrepreneur, Olympic Athlete, Founder of Mempodera and Firneza Token.
+https://www.linkedin.com/in/influencer-aline-silva-oly
+alinedaluta@gmail.com
+
+*Larissa Montefusco
+Electronic Technician, Undergraduate Student in Electrical and Computer Engineering / IoT Developer and Communication Protocols, Django Python
+https://www.linkedin.com/in/larissa-montefusco/
+larissa.montefusco7@gmail.com
+
+*Sonia Mara Batista
+Dev Blockchain, Solidity, Web3 
+LinkedIn: https://www.linkedin.com/in/soniamarabatista/
+dev.soniabatista@gmail.com
+
+*Matheus Oliveira
+Flutter Developer, Founder of Eita Rolê, Entrepreneur with Experience in Software Development and 3D Printing.
+LinkedIn: https://www.linkedin.com/in/devmatheusoliveira/
+matheusoliveira.workmso@gmail.com
+
+
+
+
+
